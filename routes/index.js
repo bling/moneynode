@@ -1,7 +1,9 @@
 var http = require('http');
 
 module.exports = function(app) {
-    var streamReader = function(options, callback) {
+    "use strict";
+
+    var streamReader = function(options, res, callback) {
         http
             .get(options, function(response) {
                 console.log("Got response: " + response.statusCode);
@@ -25,16 +27,16 @@ module.exports = function(app) {
     };
 
     app.get('/', function(req, res) {
-        res.render('index', { title: 'Express' })
+        res.render('index', { title: 'Express' });
     });
 
     app.get('/quote', function(req, res) {
         var options = {
             host: 'dev.markitondemand.com',
-            path: '/Api/Quote/jsonp?symbol=' + req.query['symbol']
+            path: '/Api/Quote/jsonp?symbol=' + req.query.symbol
         };
 
-        streamReader(options, function(json) {
+        streamReader(options, res, function(json) {
             res.write(JSON.stringify(json));
             res.end();
         });
@@ -43,10 +45,10 @@ module.exports = function(app) {
     app.get('/series', function(req, res) {
         var options = {
             host: 'dev.markitondemand.com',
-            path: '/Api/Timeseries/jsonp?symbol=' + req.query['symbol'] + '&duration=' + (req.query['duration'] || 365)
+            path: '/Api/Timeseries/jsonp?symbol=' + req.query.symbol + '&duration=' + (req.queryduration || 365)
         };
 
-        streamReader(options, function(json) {
+        streamReader(options, res, function(json) {
             res.write(JSON.stringify(json));
             res.end();
         });
