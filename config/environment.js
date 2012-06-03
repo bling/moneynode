@@ -1,8 +1,6 @@
 module.exports = function(app, express){
-    app.enable('jsonp callback');
-
     app.configure(function() {
-        app.set('views', __dirname + '/views');
+        app.set('views', __dirname + '/../views');
         app.set('view engine', 'jade');
 
         app.use(express.logger());
