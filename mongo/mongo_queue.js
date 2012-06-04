@@ -41,7 +41,12 @@ var MongoQueue = function() {
                 cursor.each(function(err, item) {
                     if (!err) {
                         console.log('received item in queue: ' + JSON.stringify(item));
-                        that.emit('data', item);
+                        if (item === null) {
+                            // cursor dead, restart
+                            initMessageCursor(collection);
+                        } else {
+                            that.emit('data', item);
+                        }
                     } else {
                         console.log(err);
                     }
@@ -51,6 +56,10 @@ var MongoQueue = function() {
             }
         });
     }
+
+    this.isConnected = function() {
+        return collection !== null;
+    };
 
     this.connect = function() {
         db.open(function(err, db) {
@@ -63,8 +72,8 @@ var MongoQueue = function() {
     };
 
     this.publish = function(message) {
-        if (collection === null) {
-            throw 'collection not initialized yet';
+        if (!that.isConnected()) {
+            throw 'not connected';
         }
 
         collection.insert(message);
