@@ -2,7 +2,7 @@ var express = require('express'),
     //cluster = require('cluster'),
     os = require('os'),
     app = module.exports = express.createServer(),
-    MongoQueue = require('./mongo/mongo_queue.js');
+    MongoQueue = require('./mongo/queue.js');
 
 require('./config/environment.js')(app, express);
 require('./routes')(app);

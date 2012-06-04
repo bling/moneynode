@@ -1,4 +1,4 @@
-var MongoQuotes = require('./../mongo/mongo_quotes.js'),
+var MongoQuotes = require('./../mongo/quotes.js'),
     markit = require('./../services/markitapi.js');
 
 var QuoteService = function() {
