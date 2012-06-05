@@ -10,8 +10,9 @@ var MongoQuotes = function() {
     var collection;
 
     function initCollection(db) {
-        db.createCollection('queue', function(err, c) {
+        db.createCollection('quotes', function(err, c) {
             if (!err) {
+                c.ensureIndex({Symbol:1}, {unique:1});
                 collection = c;
             } else {
                 console.log(err);
@@ -34,11 +35,15 @@ var MongoQuotes = function() {
     };
 
     this.getQuote = function(symbol, callback) {
-        collection.findOne({ s: symbol }, function(err, item) {
-            if (!err && item !== null) {
+        collection.findOne({ 'Symbol': symbol }, function(err, item) {
+            if (!err) {
                 callback(item);
             }
         });
+    };
+
+    this.saveQuote = function(quote) {
+        collection.save(quote);
     };
 };
 

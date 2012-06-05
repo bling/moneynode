@@ -26,8 +26,8 @@ var streamReader = function(options, callback) {
     });
 };
 
-exports.MarkItQuote = function() {
-    this.get = function(symbol, callback) {
+var MarkIt = function() {
+    this.getQuote = function(symbol, callback) {
         var options = {
             host: 'dev.markitondemand.com',
             path: '/Api/Quote/jsonp?symbol=' + symbol
@@ -35,10 +35,8 @@ exports.MarkItQuote = function() {
 
         streamReader(options, callback);
     };
-};
 
-exports.MarkItTimeSeries = function() {
-    this.get = function(symbol, duration, callback) {
+    this.getTimeSeries = function(symbol, duration, callback) {
         var options = {
             host: 'dev.markitondemand.com',
             path: '/Api/Timeseries/jsonp?symbol=' + symbol + '&duration=' + (duration || 365)
@@ -47,3 +45,5 @@ exports.MarkItTimeSeries = function() {
         streamReader(options, callback);
     };
 };
+
+module.exports = MarkIt;
