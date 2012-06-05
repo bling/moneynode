@@ -10,9 +10,19 @@ var MongoQuotes = function() {
     var collection;
 
     function initCollection(db) {
+        /* model each document as follows:
+        {
+            s: SYMBOL/TICKER,
+            t: TIMESTAMP,
+            o: OPEN,
+            h: HIGH,
+            l: LOW,
+            c: CLOSE
+        }
+        */
         db.createCollection('quotes', function(err, c) {
             if (!err) {
-                c.ensureIndex({Symbol:1}, {unique:1});
+                c.ensureIndex({s:1, t:1}, {unique:1});
                 collection = c;
             } else {
                 console.log(err);
@@ -35,7 +45,7 @@ var MongoQuotes = function() {
     };
 
     this.getQuote = function(symbol, callback) {
-        collection.findOne({ 'Symbol': symbol }, function(err, item) {
+        collection.findOne({ s: symbol }, function(err, item) {
             if (!err) {
                 callback(item);
             }
@@ -43,6 +53,13 @@ var MongoQuotes = function() {
     };
 
     this.saveQuote = function(quote) {
+        if (!quote.s) { throw 'quote.s is missing'; }
+        if (!quote.t) { throw 'quote.t is missing'; }
+        if (!quote.o) { throw 'quote.o is missing'; }
+        if (!quote.h) { throw 'quote.h is missing'; }
+        if (!quote.l) { throw 'quote.l is missing'; }
+        if (!quote.c) { throw 'quote.c is missing'; }
+
         collection.save(quote);
     };
 };
