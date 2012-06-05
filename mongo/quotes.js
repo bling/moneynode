@@ -1,11 +1,10 @@
-var mongo = require('mongodb'),
+var mongo = require('mongoskin'),
     events = require('events');
 
 var MongoQuotes = function() {
     events.EventEmitter.call(this);
 
-    var server = new mongo.Server(process.env.MONGOLAB_URI || 'localhost', 27017, { auto_reconnect: true });
-    var db = new mongo.Db('moneynode', server);
+    var db = mongo.db(process.env.MONGOLAB_URI || 'mongodb://localhost/moneynode', { auto_reconnect: 1});
     var that = this;
     var collection;
 
