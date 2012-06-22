@@ -1,11 +1,13 @@
 var MongoQuotes = require('./../mongo/quotes.js'),
-    MarkIt = require('./../services/markitapi.js');
+    MarkIt = require('./../services/markit.js'),
+    Yahoo = require('./../services/yahoo.js');
 
 var MarketService = function() {
+    var markit = new MarkIt();
+    var yahoo = new Yahoo();
+
     var mongo = new MongoQuotes();
     mongo.connect();
-
-    var markit = new MarkIt();
 
     this.getQuote = function(symbol, callback) {
         mongo.getQuote(symbol, function(item) {
@@ -19,6 +21,12 @@ var MarketService = function() {
                 console.log('retrieved ' + symbol + ' from mongo...');
                 callback(item);
             }
+        });
+    };
+
+    this.getHistorical = function(symbol, callback) {
+        yahoo.getHistorical({symbol:symbol}, function(quote) {
+            callback(quote);
         });
     };
 
